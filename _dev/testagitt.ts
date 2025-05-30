@@ -15,6 +15,17 @@ const client = new PowerOffice({
         await client.authenticate();
         console.log('Authenticated successfully.');
 
+        const salesOrders = client.salesOrders();
+
+        salesOrders.salesOrders.getSalesOrderById({
+            id: '12345', // Replace with a valid sales order ID
+            showInherited: true
+        }).then(order => {
+            console.log('Sales Order:', order);
+        }).catch(error => {
+            console.error('Error fetching sales order:', error);
+        });
+
         const accountSettings = client.accountingSettings();
 
         const currencies = await accountSettings.currencies.getCurrencies();
