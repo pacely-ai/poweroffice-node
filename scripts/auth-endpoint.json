@@ -1,0 +1,176 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Authentication DEMO",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "https://goapi.poweroffice.net/demo/oauth"
+        }
+    ],
+    "paths": {
+        "/Token": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Function to obtain a new access token to be used with Poweroffice Go API (v2).\r\nFollows the The OAuth 2.0 Authorization Framework standard (link: https://www.rfc-editor.org/rfc/rfc6749).\r\nThe following Authorization Grants are supported: Client Credentials Grant.\r\nThe request header must be configur",
+                "description": "Function to obtain a new access token to be used with Poweroffice Go API (v2).\r\nFollows the The OAuth 2.0 Authorization Framework standard (link: https://www.rfc-editor.org/rfc/rfc6749).\r\nThe following Authorization Grants are supported: Client Credentials Grant.\r\nThe request header must be configured with the following:\r\n1. Content-type must be 'application/x-www-form-urlencoded' with charset=utf-8.\r\n2. Authorization must contain the word 'Basic ' followed by a Base64 encoded string containing the application key and client key. The keys must be separated by ':'.\r\nAnd the request body must contain the parameter 'grant_type' with the value 'client_credentials'.",
+                "operationId": "post-token",
+                "requestBody": {
+                    "description": "Only Client Credentials Grant is supported.",
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "properties": {
+                                    "grant_type": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TokenResponseDto"
+                                },
+                                "example": {
+                                    "access_token": "string",
+                                    "token_type": "bearer",
+                                    "expires_in": 600
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponseDto"
+                                },
+                                "example": {
+                                    "error": "invalid_client",
+                                    "error_description": "Client integration not found. Please ensure the provided keys are matching the desired environment."
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "Too Many Requests",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RateLimitResponseDto"
+                                },
+                                "example": {
+                                    "statusCode": "429",
+                                    "message": "Rate limit is exceeded. Try again in 1 seconds."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ErrorResponseDto": {
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "type": "string",
+                        "description": "One of 6 error codes.\r\nMore info: https://tools.ietf.org/html/rfc6749#section-5.2",
+                        "nullable": true,
+                        "readOnly": true,
+                        "example": "invalid_client"
+                    },
+                    "error_description": {
+                        "type": "string",
+                        "description": "Human-readable ASCII [USASCII] text providing additional information, used to assist the client developer in understanding the error that occurred.",
+                        "nullable": true,
+                        "readOnly": true,
+                        "example": "Client integration not found. Please ensure the provided keys are matching the desired environment."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Model for Error response, as defined in \"The OAuth 2.0 Authorization Framework\" (RFC 6749).\r\nMore info: https://tools.ietf.org/html/rfc6749#section-5.2"
+            },
+            "RateLimitResponseDto": {
+                "type": "object",
+                "properties": {
+                    "statusCode": {
+                        "type": "string",
+                        "description": "Status Code",
+                        "nullable": true,
+                        "readOnly": true,
+                        "example": "429"
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "Rate Limit Message.",
+                        "nullable": true,
+                        "readOnly": true,
+                        "example": "Rate limit is exceeded. Try again in 1 seconds."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Model for rate limit response."
+            },
+            "TokenResponseDto": {
+                "type": "object",
+                "properties": {
+                    "access_token": {
+                        "type": "string",
+                        "description": "Access tokens are credentials used to access protected resources. An access token is a string representing an authorization issued to the client.\r\nMore info: https://tools.ietf.org/html/rfc6749#section-1.4",
+                        "nullable": true,
+                        "readOnly": true
+                    },
+                    "token_type": {
+                        "type": "string",
+                        "description": "The access token type provides the client with the information required to successfully utilize the access token to make a protected resource request (along with type-specific attributes).\r\nMore info: https://www.rfc-editor.org/rfc/rfc6749#section-7.1",
+                        "nullable": true,
+                        "readOnly": true,
+                        "example": "bearer"
+                    },
+                    "expires_in": {
+                        "type": "integer",
+                        "description": "The lifetime in seconds of the access token.\r\nFor example, the value \"3600\" denotes that the access token will expire in one hour from the time the response was generated.",
+                        "format": "int32",
+                        "readOnly": true,
+                        "example": 600
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Model for Token response, as defined in \"The OAuth 2.0 Authorization Framework\" (RFC 6749).\r\nMore info: https://tools.ietf.org/html/rfc6749#section-5.1"
+            }
+        },
+        "securitySchemes": {
+            "apiKeyHeader": {
+                "type": "apiKey",
+                "name": "Ocp-Apim-Subscription-Key",
+                "in": "header"
+            },
+            "apiKeyQuery": {
+                "type": "apiKey",
+                "name": "subscription-key",
+                "in": "query"
+            }
+        }
+    },
+    "security": [
+        {
+            "apiKeyHeader": []
+        },
+        {
+            "apiKeyQuery": []
+        }
+    ]
+}
