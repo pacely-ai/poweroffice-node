@@ -1,7 +1,7 @@
 {
   "name": "@pacely/poweroffice-node",
   "description": "API Client for PowerOffice Go. Supports API v2",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -11,6 +11,9 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     }
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "files": [
     "dist"
