@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import PowerOffice from ".";
+import PowerOffice from "../dist/index";
 
 dotenv.config();
 
@@ -15,16 +15,16 @@ const client = new PowerOffice({
         await client.authenticate();
         console.log('Authenticated successfully.');
 
-        const salesOrders = client.salesOrders();
+        // const salesOrders = client.salesOrders();
 
-        salesOrders.salesOrders.getSalesOrderById({
-            id: '12345', // Replace with a valid sales order ID
-            showInherited: true
-        }).then(order => {
-            console.log('Sales Order:', order);
-        }).catch(error => {
-            console.error('Error fetching sales order:', error);
-        });
+        // salesOrders.salesOrders.getSalesOrderById({
+        //     id: '12345', // Replace with a valid sales order ID
+        //     showInherited: true
+        // }).then(order => {
+        //     console.log('Sales Order:', order);
+        // }).catch(error => {
+        //     console.error('Error fetching sales order:', error);
+        // });
 
         const accountSettings = client.accountingSettings();
 
