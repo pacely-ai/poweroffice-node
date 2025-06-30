@@ -1,7 +1,7 @@
 {
     "name": "@pacely/poweroffice-node",
     "description": "API Client for PowerOffice Go. Supports API v2",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "type": "module",
     "main": "./dist/index.cjs",
     "module": "./dist/index.js",
@@ -22,13 +22,18 @@
         "type": "git",
         "url": "https://github.com/pacely-ai/poweroffice-node.git"
     },
-    "keywords": ["Pacely, PowerOffice, API, Client, Node.js"],
+    "keywords": [
+        "Pacely, PowerOffice, API, Client, Node.js"
+    ],
     "author": "Prek AS <chris@prek.no>",
     "license": "MIT",
     "scripts": {
         "build": "pnpm openapi:generate && tsup",
         "openapi:clean": "rimraf src/openapi",
-        "openapi:generate": "tsx scripts/openapi-generate.mjs",
+        "openapi:clean:v1": "rimraf src/v1/openapi",
+        "openapi:clean:v2": "rimraf src/v2/openapi",
+        "openapi:generate:v1": "tsx scripts/generate/v1.mjs",
+        "openapi:generate:v2": "tsx scripts/generate/v2.mjs",
         "changeset": "changeset",
         "changeset:version": "changeset version",
         "changeset:publish": "pnpm build && changeset publish",

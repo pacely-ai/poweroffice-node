@@ -2,7 +2,7 @@ import fs from "fs";
 import path from 'path';
 import { generate } from '@athlera/openapi-typescript-codegen';
 import dotenv from 'dotenv';
-import { replaceRegionBlock } from './replace-block.mjs'
+import { replaceRegionBlock } from '../replace-block.mjs'
 
 dotenv.config();
 
@@ -54,7 +54,7 @@ dotenv.config();
             httpClient: 'fetch',
             clientName: `${endpoint.name}`,
             input: `${process.env.POGO_SWAGGER_SPEC}${endpoint.url}`,
-            output: `./src/openapi/${endpoint.name}`,
+            output: `./src/v2/openapi/${endpoint.name}`,
             useOptions: true,
             //exportSchemas: true,
         });
@@ -78,8 +78,8 @@ dotenv.config();
     await generate({
         //httpClient: 'fetch',
         clientName: 'PowerOffice',
-        input: path.join(import.meta.url, '../auth-endpoint.json'),
-        output: './src/openapi/Authentication',
+        input: path.join(import.meta.url, '../../auth-endpoint.json'),
+        output: './src/v2/openapi/Authentication',
         useOptions: true,
         //exportSchemas: true,
     });
@@ -90,13 +90,13 @@ dotenv.config();
 
 
     // Write the index file for the OpenAPI clients
-    console.log('Creating ./src/openapi/index.ts file...');
-    const filePath = `./src/openapi/index.ts`;
+    console.log('Creating ./src/v2/openapi/index.ts file...');
+    const filePath = `./src/v2/openapi/index.ts`;
     fs.writeFileSync(filePath, indexImportCode.join('\n'), 'utf8');
     console.log('Index file written successfully!');
 
     // Edit the Service class
-    const indexFilePath = `./src/index.ts`;
+    const indexFilePath = `./src/v2/index.ts`;
     console.log(`Editing ${indexFilePath}...`);
 
     await replaceRegionBlock(indexFilePath, 'TYPES', servicesTypeCode);

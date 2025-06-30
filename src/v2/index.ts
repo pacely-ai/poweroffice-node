@@ -9,19 +9,19 @@ export interface PlatformConfig {
     dev?: boolean; // Optional, defaults to false
 }
 
-type PartialRequestConfig = Partial<Service.AccountingSettings.OpenAPIConfig>
+type PartialRequestConfig = Partial<Service.AccountingSettings.OpenAPIConfig>;
 
-export class PowerOffice {
-    private prodBase = 'https://goapi.poweroffice.net/v2';
-    private devBase = 'https://goapi.poweroffice.net/demo/v2';
-    private prodAuthUrl = 'https://goapi.poweroffice.net/oauth';
-    private devAuthUrl = 'https://goapi.poweroffice.net/demo/oauth';
-    
+export class PowerOfficeV2 {
+    private prodBase = "https://goapi.poweroffice.net/v2";
+    private devBase = "https://goapi.poweroffice.net/demo/v2";
+    private prodAuthUrl = "https://goapi.poweroffice.net/oauth";
+    private devAuthUrl = "https://goapi.poweroffice.net/demo/oauth";
+
     // Configuration for the PowerOffice API
     private config: PlatformConfig = {
-        appKey: '',
-        clientKey: '',
-        subscriptionKey: '',
+        appKey: "",
+        clientKey: "",
+        subscriptionKey: "",
         accessToken: undefined,
         headers: {},
         dev: false, // Default to false
@@ -66,7 +66,7 @@ export class PowerOffice {
 
     /**
      * Initialize the PacelyAPI with the given configuration
-     * 
+     *
      * @param config PlatformConfig
      */
     constructor(config: PlatformConfig) {
@@ -112,7 +112,7 @@ export class PowerOffice {
 
     /**
      * Authenticate with PowerOffice API and retrieve an access token
-     * 
+     *
      * @returns Promise<any>
      */
     async authenticate() {
@@ -129,7 +129,7 @@ export class PowerOffice {
             method: "POST",
             headers: headers,
             body: urlencoded,
-            redirect: "follow"
+            redirect: "follow",
         };
 
         const url = this.config.dev ? this.devAuthUrl : this.prodAuthUrl;
@@ -137,7 +137,7 @@ export class PowerOffice {
             .then((response) => response.json())
             .then((result) => {
                 if (!result.access_token) {
-                    throw new Error('Authentication failed: No access token received');
+                    throw new Error("Authentication failed: No access token received");
                 }
                 return result;
             })
@@ -152,7 +152,7 @@ export class PowerOffice {
 
     /**
      * Get the configuration for the API request
-     * 
+     *
      * @param config Partial<Service.AccountTransactions.OpenAPIConfig>
      * @returns Partial<Service.AccountTransactions.OpenAPIConfig>
      */
@@ -161,17 +161,17 @@ export class PowerOffice {
             BASE: this.config.dev ? this.devBase : this.prodBase,
             TOKEN: this.config.accessToken || this.authenticate,
             HEADERS: {
-                'User-Agent': 'poweroffice-node',
-                'Ocp-Apim-Subscription-Key': this.config.subscriptionKey,
+                "User-Agent": "poweroffice-node",
+                "Ocp-Apim-Subscription-Key": this.config.subscriptionKey,
                 ...this.config.headers,
             },
-            ...config
-        }
+            ...config,
+        };
     }
 
     /**
      * Set API key
-     * 
+     *
      * @param accessToken string
      */
     setAccessKey(accessToken: string) {
@@ -180,7 +180,7 @@ export class PowerOffice {
 
     /**
      * Set headers
-     * 
+     *
      * @param headers Record<string, any>
      */
     setHeaders(headers: Record<string, any>) {
@@ -189,7 +189,7 @@ export class PowerOffice {
 
     /**
      * Add header
-     * 
+     *
      * @param key string
      * @param value any
      */
@@ -202,7 +202,7 @@ export class PowerOffice {
 
     /**
      * Set token resolver
-     * 
+     *
      * @param tokenResolver Resolver<string>
      */
     // setTokenResolver(tokenResolver: Resolver<string>) {
@@ -212,4 +212,4 @@ export class PowerOffice {
 
 export * from "./openapi";
 
-export default PowerOffice;
+export default PowerOfficeV2;
