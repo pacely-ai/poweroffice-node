@@ -24,7 +24,7 @@
     },
     "keywords": ["Pacely, PowerOffice, API, Client, Node.js"],
     "author": "Prek AS <chris@prek.no>",
-    "license": "ISC",
+    "license": "MIT",
     "scripts": {
         "build": "pnpm openapi:generate && tsup",
         "openapi:clean": "rimraf src/openapi",
